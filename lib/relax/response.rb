@@ -2,6 +2,7 @@ require 'rubygems'
 require 'hpricot'
 
 require 'date'
+require 'time'
 
 module Relax
   # Response is intended to be a parent class for responses passed to
