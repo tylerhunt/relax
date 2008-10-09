@@ -1,0 +1,171 @@
+= Relax
+
+Relax is a simple library that provides a foundation for writing REST consumer
+APIs, including the logic to handle the HTTP requests, build URLs with query
+parameters, and parse XML responses.
+
+It provides a basic set of functionality common to most REST consumers:
+
+- building HTTP queries (Relax::Request)
+- issuing HTTP requests (Relax::Service)
+- parsing XML responses (Relax::Response)
+
+
+== Tutorial
+
+This short tutorial will walk you through the basic steps of creating a simple Flickr API that supports a single call to search for photos by tags.
+
+=== Step 1
+
+In the first step we're going to simply include Relax, and define the basis for
+our Service class.
+
+  require 'rubygems'
+  require 'relax'
+
+  module Flickr
+    class Service < Relax::Service
+      ENDPOINT = 'http://api.flickr.com/services/rest/'
+
+      def initialize
+        super(ENDPOINT)
+      end
+    end
+  end
+
+
+=== Step 2
+
+Next we're going to define common Request and Response classes for use
+throughout our API. This gives us a single point to add any shared
+functionality. For Flickr, this means that each request will have a "method"
+parameter, and each response will have a "stat" attribute that will equal "ok"
+when the response comes back without any errors.
+
+  module Flickr
+    class Request < Relax::Request
+      parameter :method
+    end
+
+    class Response < Relax::Response
+      def successful?
+        root[:stat] == 'ok'
+      end
+    end
+  end
+
+While we're at it, we're also going to add a new line to the constructor from
+our service to make sure that our Flickr API key gets passed along with each
+request as well.
+
+  module Flickr
+    class Service < Relax::Service
+      ENDPOINT = 'http://api.flickr.com/services/rest/'
+      
+      def initialize(api_key)
+        super(ENDPOINT)
+        Request[:api_key] = api_key
+      end
+    end
+  end
+
+When we call our Request class as we have here, we're basically setting up a
+value on our request that acts like a template. Each request we create now will
+have the api_key property prepopulated for us.
+
+
+=== Step 3
+
+Next, we're going to need a basic Photo class to represent photos that Flickr
+returns to us.
+
+  module Flickr
+    class Photo < Response
+      parameter :id, :attribute => true, :type => :integer
+      parameter :title, :attribute => true
+    end
+  end
+
+Here we're creating a Response class that extends our Flickr::Response, which
+has two parameters: "id" and "title." By setting the attribute option to true,
+we're telling Relax to look for an attribute by that name on the XML root
+instead of checking for an element by that name. The type options can be used
+to specify what type of data we're expecting the response to give us. The
+default type is string.
+
+
+=== Step 4
+
+Now we arrive at the final piece of the puzzle: a service call module. To keep
+things contained, a Relax best practice is to create a module for each call
+on your service. The one we're creating here is the PhotoSearch module for the
+"flickr.photos.search" call on the Flickr API.
+
+There are three main pieces to every service call module:
+
+1. a Relax::Request object
+2. a Relax::Response object
+3. a call method that calls Relax::Service#call
+
+Here's what the PhotoSearch module looks like:
+
+  module Flickr
+    module PhotoSearch
+      class PhotoSearchRequest < Flickr::Request
+        parameter :per_page
+        parameter :tags
+
+        def initialize(options = {})
+          super
+          @method = 'flickr.photos.search'
+        end
+      end
+
+      class PhotoSearchResponse < Flickr::Response
+        parameter :photos, :element => 'photos/photo', :collection => Photo
+      end
+
+      def search(options = {})
+        call(PhotoSearchRequest.new(options), PhotoSearchResponse)
+      end
+
+      def find_by_tag(tags, options = {})
+        search(options.merge(:tags => tags))
+      end
+    end
+  end
+
+As you can see, we have our request (PhotoSearchRequest), response
+(PhotoSearchResponse), and call method (actually, two in this case: search and
+ find_by_tag). This now needs to be included into our Flickr::Service class,
+and then we'll be able to use it by calling either of the call methods.
+
+  module Flickr
+    class Service < Relax::Service
+      include Flickr::PhotoSearch
+
+      ENDPOINT = 'http://api.flickr.com/services/rest/'
+      
+      def initialize(api_key)
+        super(ENDPOINT)
+        Request[:api_key] = api_key
+      end
+    end
+  end
+
+Now we're ready to make a call against the API:
+
+  flickr = Flickr::Service.new(ENV['FLICKR_API_KEY'])
+  relax = flickr.find_by_tag('relax', :per_page => 10)
+
+  if relax.successful?
+    relax.photos.each do |photo|
+      puts "[#{photo.id}] #{photo.title}"
+    end
+  end
+
+This will output the IDs and titles for the first 10 photos on Flickr that have
+the tag "relax."
+
+
+Copyright (c) 2007-2008 Tyler Hunt, released under the MIT license

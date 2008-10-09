@@ -1,0 +1,20 @@
+0.0.4 - November 17, 2007
+
+* Added support for custom Request parameter types
+
+0.0.3 - November 1, 2007
+
+* Fixed that parameter values defined in ancestors weren't passed to children
+* Added date and time parameter types to Response
+* Added an accessor for the raw XML to Response
+
+0.0.2 - October 10, 2007
+
+* Renamed API to Service
+* Added tutorial to the README
+* Added Rdoc documentation
+* Added support for custom Response parameter types
+
+0.0.1 - September 27, 2007
+
+* First public release
