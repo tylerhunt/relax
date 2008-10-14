@@ -32,7 +32,7 @@ module Relax
 
       # Unescapes a query parameter value.
       def unescape_value(value)
-        URI.unescape(value)
+        URI.unescape(value.gsub('+', '%20'))
       end
     end
 
