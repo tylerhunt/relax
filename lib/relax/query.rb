@@ -1,4 +1,4 @@
-require 'erb'
+require 'cgi'
 require 'uri'
 
 require 'relax/symbolic_hash'
@@ -18,8 +18,8 @@ module Relax
       # Parses a URL and returns a Query with its query portion.
       def parse(uri)
         query = uri.query.split('&').inject({}) do |query, parameter|
-          key, value = parameter.split('=')
-          query[key] = unescape_value(value)
+          key, value = parameter.split('=', 2)
+          query[unescape_value(key)] = unescape_value(value)
           query
         end
         self.new(query)

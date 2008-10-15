@@ -42,4 +42,19 @@ describe 'a query' do
     parsed_query[:action].should eql('search')
     parsed_query[:query].should eql('keyword')
   end
+  
+  it 'should parse key value pairs into only two parts' do
+    parsed_query = Relax::Query.parse(URI.parse("http://example.com/?action=test=&foo=bar"))
+    parsed_query[:action].should eql('test=')
+  end
+  
+  it 'should unescape query string key-value pair keys' do
+    parsed_query = Relax::Query.parse(URI.parse("http://example.com/?action%20helper=test"))
+    parsed_query[:"action helper"].should eql('test')
+  end
+  
+  it 'should unescape query string key-value pair values' do
+    parsed_query = Relax::Query.parse(URI.parse("http://example.com/?action=test%20action"))
+    parsed_query[:action].should eql('test action')
+  end
 end
