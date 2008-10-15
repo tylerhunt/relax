@@ -27,12 +27,12 @@ module Relax
 
       # Escapes a query parameter value.
       def escape_value(value)
-        ERB::Util.url_encode(value.to_s).gsub('%20', '+')
+        CGI.escape(value.to_s).gsub('%20', '+')
       end
 
       # Unescapes a query parameter value.
       def unescape_value(value)
-        URI.unescape(value.gsub('+', '%20'))
+        CGI.unescape(value)
       end
     end
 

@@ -24,10 +24,6 @@ describe 'a query' do
     Relax::Query.send(:escape_value, 'two words').should == 'two+words'
   end
   
-  it 'should unescape "+" values' do
-    Relax::Query.send(:unescape_value, 'two+words').should == 'two words'
-  end
-
   it 'should sort its parameters' do
     @query[:charlie] = 3
     @query[:alpha] = 1
