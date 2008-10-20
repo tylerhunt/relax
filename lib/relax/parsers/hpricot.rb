@@ -4,7 +4,12 @@ require 'hpricot'
 module Relax
   module Parsers
     
+    ##
+    # Parses the server's raw response using the Hpricot library.
+    # 
     class Hpricot < Base
+      
+      FACTORY_NAME = :hpricot
       
       def initialize(raw, parent)
         @xml = ::Hpricot.XML(raw)
@@ -134,7 +139,7 @@ module Relax
       
     end
     
-    Factory.register(:hpricot, Hpricot)
+    Factory.register(Hpricot::FACTORY_NAME, Hpricot)
     
   end
 end
