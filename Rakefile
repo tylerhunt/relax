@@ -9,7 +9,7 @@ task :default => :gem
 
 spec = Gem::Specification.new do |spec|
   spec.name = 'relax'
-  spec.version = '0.0.4'
+  spec.version = '0.0.5'
   spec.summary = 'A simple library for creating REST consumers.'
   spec.author = 'Tyler Hunt'
   spec.email = 'tyler@tylerhunt.com'
@@ -27,6 +27,13 @@ end
 Rake::GemPackageTask.new(spec) do |package| 
   package.need_tar = true 
 end 
+
+desc "Generate a gemspec file for GitHub"
+task :gemspec do
+  File.open("#{spec.name}.gemspec", 'w') do |f|
+    f.write spec.to_ruby
+  end
+end
 
 Rake::RDocTask.new do |rdoc|
   rdoc.title    = 'Relax Documentation'

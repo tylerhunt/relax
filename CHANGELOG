@@ -1,3 +1,9 @@
+0.0.5 - October 20, 2008
+
+* Added support for multiple parsers (nbibler)
+* Added a REXML parser (nbibler)
+* Added a GitHub gemspec and a Rake task for regenerating it
+
 0.0.4 - November 17, 2007
 
 * Added support for custom Request parameter types
