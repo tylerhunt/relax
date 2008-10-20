@@ -19,6 +19,7 @@ class RexmlTestResponse < Relax::Response
   parameter :status,        :element => 'Status',     :required => true
   parameter :request_id,    :element => 'RequestId',  :type => :integer
   parameter :valid_request, :element => 'RequestId',  :attribute => :valid
+  parameter :namespace,     :element => 'Namespace',  :namespace => 'ns1'
   parameter :tokens,        :element => 'Tokens',     :collection => Token
   parameter :error,         :element => 'Error',      :type => Error
 end
@@ -31,5 +32,9 @@ describe 'a REXML parser' do
   end
   
   it_should_behave_like 'a successfully parsed response'
+  
+  it 'should parse namespaced parameters' do
+    @response.namespace.should eql('Passed')
+  end
   
 end
