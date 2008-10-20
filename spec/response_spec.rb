@@ -34,6 +34,7 @@ class TestResponse < BaseResponse
   end
 
   class Error < Relax::Response
+    parser :hpricot
     parameter :code, :type => :integer
     parameter :message
   end
@@ -105,5 +106,13 @@ describe 'a response' do
 
   it 'should raise MissingParameter if required parameters are missing' do
     proc { TestResponse.new('') }.should raise_error(Relax::MissingParameter)
+  end
+  
+  it 'should use the default parser when undefined' do
+    TestResponse::Token.new('').parser_name.should ==:default
+  end
+  
+  it 'should use the defined parser when given' do
+    TestResponse::Error.new('').parser_name.should ==:hpricot
   end
 end

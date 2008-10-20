@@ -9,4 +9,5 @@ require 'relax/symbolic_hash'
 
 module Relax
   class MissingParameter < ArgumentError ; end
+  class UnrecognizedParser < ArgumentError ; end
 end

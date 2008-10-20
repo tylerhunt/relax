@@ -14,7 +14,11 @@ module Relax
     # required is not present in the parsed response.
     def initialize(xml)
       @raw    = xml
-      @parser = Relax::Parsers::Hpricot.new(xml.to_s, self)
+      @parser = Relax::Parsers::Factory.get(parser_name).new(xml.to_s, self)
+    end
+    
+    def parser_name
+      self.class.instance_variable_get('@parser') || :default
     end
     
     def method_missing(method, *args) #:nodoc:
@@ -35,6 +39,7 @@ module Relax
         @parameters.each do |name, options|
           subclass.parameter(name, options)
         end if @parameters
+        subclass.parser(@parser) if @parser
       end
 
       # Specifes a parameter that will be automatically parsed when the
@@ -53,6 +58,15 @@ module Relax
         attr_accessor name
         @parameters ||= {}
         @parameters[name] = options
+      end
+      
+      # Specifies the parser to use when decoding the server response.  If 
+      # no parser is specified for the response, then the default parser will
+      # be used.
+      # 
+      # See Relax::Parsers for a list of available parsers.
+      def parser(name)
+        @parser ||= name
       end
 
       def ===(response)

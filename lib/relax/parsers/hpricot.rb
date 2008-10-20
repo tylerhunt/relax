@@ -134,5 +134,7 @@ module Relax
       
     end
     
+    Factory.register(:hpricot, Hpricot)
+    
   end
 end
