@@ -1,26 +1,5 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-require 'relax/response'
-
-XML = <<EOF
-<?xml version="1.0"?>
-<RESTResponse>
-  <Tokens>
-    <TokenId>JPMQARDVJK</TokenId>
-    <Status>Active</Status>
-  </Tokens>
-  <Tokens>
-    <TokenId>RDVJKJPMQA</TokenId>
-    <Status>Inactive</Status>
-  </Tokens>
-  <Status>Success</Status>
-  <RequestId valid="true">44287</RequestId>
-  <Error>
-    <Code>1</Code>
-    <Message>Failed</Message>
-  </Error>
-</RESTResponse>
-EOF
 
 class BaseResponse < Relax::Response
   parameter :status, :required => true
@@ -43,6 +22,7 @@ class TestResponse < BaseResponse
   parameter :tokens, :collection => Token
   parameter :error, :type => Error
 end
+
 
 describe 'a response' do
   before(:each) do
