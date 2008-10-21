@@ -138,7 +138,7 @@ module Relax
       
       # Converts a name to a node name.
       def node_name(name, namespace = nil)
-        "#{namespace.to_s + ':' if namespace}#{name}"
+        @parent.node_name(name, namespace)
       end
 
       # Gets the XPath expression representing the root node.
