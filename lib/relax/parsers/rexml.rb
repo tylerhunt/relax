@@ -43,7 +43,7 @@ module Relax
               
               if options[:collection]
                 value = node.collect do |element|
-                  options[:collection].new(element.deep_clone)
+                  options[:collection].new(element.to_s)
                 end
               else
                 case type = options[:type]
