@@ -1,3 +1,8 @@
+0.0.6 - February 3, 2009
+
+* Fixed attribute-based parameters
+* Fixed an issue with node_name in the new parsers (nbibler)
+
 0.0.5 - October 20, 2008
 
 * Added support for multiple parsers (nbibler)
