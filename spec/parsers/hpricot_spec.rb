@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 require File.dirname(__FILE__) + '/../parser_helper'
 
-
 class HpricotTestResponse < Relax::Response
   class Token < Relax::Response
     parser :hpricot
@@ -14,7 +13,7 @@ class HpricotTestResponse < Relax::Response
     parameter :code, :type => :integer
     parameter :message
   end
-  
+
   parser :hpricot
   parameter :status, :required => true
   parameter :request_id, :element => :requestid, :type => :integer
@@ -23,13 +22,10 @@ class HpricotTestResponse < Relax::Response
   parameter :error, :type => Error
 end
 
-
 describe 'an Hpricot parser' do
-  
   before(:each) do
     @response = HpricotTestResponse.new(XML)
   end
-  
+
   it_should_behave_like 'a successfully parsed response'
-  
 end

@@ -27,14 +27,15 @@ module Relax
               element = options[:element] || parameter
               namespace = options[:namespace]
 
-              if attribute = options[:attribute] and attribute == true
-                node = attribute(root, element, namespace)
-              elsif attribute
-                node = attribute(element(element), attribute, namespace)
-              elsif options[:collection]
-                node = elements(element, namespace)
-              else
-                node = element(element, namespace)
+              node = case
+                when options[:attribute] && options[:attribute] == true
+                  attribute(root, element, namespace)
+                when options[:attribute]
+                  attribute(element(element), options[:attribute], namespace)
+                when options[:collection]
+                  elements(element, namespace)
+                else
+                  element(element, namespace)
               end
 
               if options[:collection]
@@ -42,25 +43,20 @@ module Relax
                   options[:collection].new(element.to_s)
                 end
               else
-                case type = options[:type]
+                value = case type = options[:type]
                   when Response
-                    value = type.new(node)
-
+                    type.new(node)
                   when :date
-                    value = date_value(node)
-
+                    date_value(node)
                   when :time
-                    value = time_value(node)
-
+                    time_value(node)
                   when :float
-                    value = float_value(node)
-
+                    float_value(node)
                   when :integer
-                    value = integer_value(node)
-
+                    integer_value(node)
                   when :text
                   else
-                    value = text_value(node)
+                    text_value(node)
                 end
               end
 
@@ -78,23 +74,23 @@ module Relax
       end
 
       # Checks the name of the root node.
-      def is?(name, namespace = nil)
+      def is?(name, namespace=nil)
         root.name == node_name(name, nil)
       end
 
       # Returns a set of elements matching name.
-      def elements(name, namespace = nil)
+      def elements(name, namespace=nil)
         root.get_elements(node_path(name, namespace))
       end
 
       # Returns an element of the specified name.
-      def element(name, namespace = nil)
+      def element(name, namespace=nil)
         root.elements[node_path(name, namespace)]
       end
       alias :has? :element
 
       # Returns an attribute on an element.
-      def attribute(element, name, namespace = nil)
+      def attribute(element, name, namespace=nil)
         element.attribute(name)
       end
 
@@ -129,7 +125,7 @@ module Relax
       end
 
       # Converts a name to a node name.
-      def node_name(name, namespace = nil)
+      def node_name(name, namespace=nil)
         @parent.node_name(name, namespace)
       end
       private :node_name
@@ -140,7 +136,7 @@ module Relax
       end
       private :root_path
 
-      def node_path(name, namespace = nil)
+      def node_path(name, namespace=nil)
         "#{node_name(name, namespace)}"
       end
       private :node_path

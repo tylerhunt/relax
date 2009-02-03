@@ -29,22 +29,21 @@ describe 'a successfully parsed response', :shared => true do
     @response.has?(:Status).should_not be_nil
     @response.has?(:Errors).should be_nil
   end
-  
+
   it 'should set known parameters' do
     @response.status.should eql('Success')
-    @response.request_id.should ==(44287)
+    @response.request_id.should eql(44287)
     @response.valid_request.should eql("true")
   end
-  
+
   it 'should automatically pull parameters from the XML' do
     @response.tokens.length.should eql(2)
     @response.tokens.first.status.should eql('Active')
     @response.error.code.should eql(1)
     @response.error.message.should eql('Failed')
   end
-  
+
   it 'should raise MissingParameter if required parameters are missing' do
     proc { @response.class.new('') }.should raise_error(Relax::MissingParameter)
   end
-  
 end

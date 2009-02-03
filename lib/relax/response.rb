@@ -43,6 +43,7 @@ module Relax
         @parameters.each do |name, options|
           subclass.parameter(name, options)
         end if @parameters
+
         subclass.parser(@parser) if @parser
       end
 
@@ -58,15 +59,15 @@ module Relax
       # - <tt>:object</tt>: A class used to instantiate an element.
       # - <tt>:type</tt>: The type of the parameter. Should be one of
       #   <tt>:text</tt>, <tt>:integer</tt>, <tt>:float</tt>, or <tt>:date</tt>.
-      def parameter(name, options = {})
+      def parameter(name, options={})
         attr_accessor name
         @parameters ||= {}
         @parameters[name] = options
       end
 
-      # Specifies the parser to use when decoding the server response.  If
-      # no parser is specified for the response, then the default parser will
-      # be used.
+      # Specifies the parser to use when decoding the server response. If no
+      # parser is specified for the response, then the default parser will be
+      # used.
       #
       # See Relax::Parsers for a list of available parsers.
       def parser(name)

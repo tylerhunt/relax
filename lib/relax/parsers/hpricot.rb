@@ -18,14 +18,15 @@ module Relax
             begin
               element = options[:element] || parameter
 
-              if attribute = options[:attribute] && attribute == true
-                node = attribute(root, element)
-              elsif attribute
-                node = attribute(element(element), attribute)
-              elsif options[:collection]
-                node = elements(element)
-              else
-                node = element(element)
+              node = case
+                when options[:attribute] && options[:attribute] == true
+                  attribute(root, element)
+                when options[:attribute]
+                  attribute(element(element), options[:attribute])
+                when options[:collection]
+                  elements(element)
+                else
+                  element(element)
               end
 
               if options[:collection]
@@ -33,29 +34,23 @@ module Relax
                   options[:collection].new(element)
                 end
               else
-                case type = options[:type]
+                value = case type = options[:type]
                   when Response
-                    value = type.new(node)
-
+                    type.new(node)
                   when :date
-                    value = date_value(node)
-
+                    date_value(node)
                   when :time
-                    value = time_value(node)
-
+                    time_value(node)
                   when :float
-                    value = float_value(node)
-
+                    float_value(node)
                   when :integer
-                    value = integer_value(node)
-
+                    integer_value(node)
                   when :text
                   else
-                    value = text_value(node)
+                    text_value(node)
                 end
               end
 
-              puts "#{parameter} = #{value}"
               parent.instance_variable_set("@#{parameter}", value)
             rescue ::Hpricot::Error
               raise Relax::MissingParameter if options[:required]
