@@ -7,20 +7,20 @@ module Relax
   # #element and #attribute.
   class Response
     attr_accessor :raw
-    
+
     # New takes in and parses the raw response.
     #
     # This will raise a MissingParameter error if a parameterd marked as
     # required is not present in the parsed response.
     def initialize(xml)
-      @raw    = xml
+      @raw = xml
       @parser = Relax::Parsers::Factory.get(parser_name).new(xml.to_s, self)
     end
-    
+
     def parser_name
       self.class.instance_variable_get('@parser') || :default
     end
-    
+
     def method_missing(method, *args) #:nodoc:
       if @parser.respond_to?(method)
         @parser.__send__(method, *args)
@@ -59,11 +59,11 @@ module Relax
         @parameters ||= {}
         @parameters[name] = options
       end
-      
-      # Specifies the parser to use when decoding the server response.  If 
+
+      # Specifies the parser to use when decoding the server response.  If
       # no parser is specified for the response, then the default parser will
       # be used.
-      # 
+      #
       # See Relax::Parsers for a list of available parsers.
       def parser(name)
         @parser ||= name
@@ -73,6 +73,5 @@ module Relax
         response.is_a?(Class) ? response.ancestors.include?(self) : super
       end
     end
-
   end
 end

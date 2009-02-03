@@ -66,14 +66,14 @@ module Relax
     alias :has_key? :key?
     alias :member? :key?
 
-    protected
-
     def convert_key(key)
       !key.kind_of?(Symbol) ? key.to_sym : key
     end
+    protected :convert_key
 
     def convert_value(value)
       value
     end
+    protected :convert_value
   end
 end

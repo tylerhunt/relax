@@ -8,8 +8,8 @@ module Relax
 
     # New takes an optional hash of default parameter values. When passed,
     # the values will be set on the request if the key exists as a valid
-    # parameter name. 
-    def initialize(defaults = {})
+    # parameter name.
+    def initialize(defaults={})
       # initialize default parameter values
       self.class.parameters.each do |parameter, options|
         if defaults.has_key?(parameter)
@@ -27,6 +27,7 @@ module Relax
       self.class.parameters.keys.inject(Query.new) do |query, key|
         value = send(key)
         options = self.class.parameters[key]
+
         if value && !options[:type]
           query[convert_key(key)] = value if value
         elsif options[:type]
@@ -34,6 +35,7 @@ module Relax
             query[convert_complex_key(key, parameter)] = value.send(parameter) if value
           end
         end
+
         query
       end
     end
@@ -51,7 +53,7 @@ module Relax
       key
     end
     protected :convert_key
-    
+
     # Converts a complex key (i.e. a parameter with a custom type) when the
     # Request is converted to a query. By default, this means the key name and
     # the parameter name separated by two underscores. This method can be
@@ -82,7 +84,7 @@ module Relax
       # Adds a template value to a request class. Equivalent to creating a
       # parameter with a default value.
       def []=(key, value)
-        parameter(key, {:value => value})
+        parameter(key, :value => value)
       end
 
       # Returns a hash of all of the parameters for this request, including
