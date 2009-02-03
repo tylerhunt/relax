@@ -17,8 +17,12 @@ module Relax
       @parser = Relax::Parsers::Factory.get(parser_name).new(xml.to_s, self)
     end
 
-    def parser_name
+    def parser_name #:nodoc:
       self.class.instance_variable_get('@parser') || :default
+    end
+
+    def node_name(name, namespace=nil) #:nodoc:
+      "#{namespace.to_s + ':' if namespace}#{name}"
     end
 
     def method_missing(method, *args) #:nodoc:

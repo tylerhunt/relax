@@ -39,7 +39,7 @@ module Relax
 
               if options[:collection]
                 value = node.collect do |element|
-                  options[:collection].new(element.deep_clone)
+                  options[:collection].new(element.to_s)
                 end
               else
                 case type = options[:type]
@@ -130,7 +130,7 @@ module Relax
 
       # Converts a name to a node name.
       def node_name(name, namespace = nil)
-        "#{namespace.to_s + ':' if namespace}#{name}"
+        @parent.node_name(name, namespace)
       end
       private :node_name
 

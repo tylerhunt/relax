@@ -122,7 +122,7 @@ module Relax
 
       # Converts a name to a node name.
       def node_name(name)
-        name.to_s
+        @parent.node_name(name)
       end
       private :node_name
 
