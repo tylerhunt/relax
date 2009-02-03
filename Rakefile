@@ -4,8 +4,8 @@ require 'rake/gempackagetask'
 require 'rake/rdoctask'
 require 'spec/rake/spectask'
 
-desc 'Default: package gem.'
-task :default => :gem
+desc 'Default: run specs.'
+task :default => :spec
 
 spec = Gem::Specification.new do |spec|
   spec.name = 'relax'
