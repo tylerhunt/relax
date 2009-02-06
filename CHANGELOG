@@ -1,12 +1,12 @@
 0.0.6 - February 3, 2009
 
 * Fixed attribute-based parameters
-* Fixed an issue with node_name in the new parsers (nbibler)
+* Fixed an issue with node_name in the new parsers (Nathaniel Bibler)
 
 0.0.5 - October 20, 2008
 
-* Added support for multiple parsers (nbibler)
-* Added a REXML parser (nbibler)
+* Added support for multiple parsers (Nathaniel Bibler)
+* Added a REXML parser (Nathaniel Bibler)
 * Added a GitHub gemspec and a Rake task for regenerating it
 
 0.0.4 - November 17, 2007
