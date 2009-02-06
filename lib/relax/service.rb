@@ -66,6 +66,7 @@ module Relax
     # the body of the response is used to instantiate the response class, and
     # this response object is returned.
     def call(request, response_class)
+      request.valid?
       uri = @endpoint.clone
       uri.query = query(request).to_s
       response = request(uri)

@@ -45,6 +45,16 @@ module Relax
       to_query.to_s
     end
 
+    # Checks the validity of the property values in this request.
+    def valid?
+      self.class.parameters.each do |key, options|
+        if options[:required]
+          value = send(key)
+          raise Relax::MissingParameter if value.nil?
+        end
+      end
+    end
+
     # Converts a key when the Request is converted to a query. By default, no
     # conversion actually takes place, but this method can be overridden by
     # child classes to perform standard manipulations, such as replacing

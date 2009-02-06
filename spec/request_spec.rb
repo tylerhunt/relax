@@ -8,7 +8,7 @@ class Amount < Relax::Request
 end
 
 class TestRequest < Relax::Request
-  parameter :action
+  parameter :action, :required => true
   parameter :token_id
   parameter :user_id
   parameter :amount, :type => Amount
@@ -50,6 +50,12 @@ end
 describe 'a normal request' do
   it_should_behave_like 'a request that converts to a query'
   it_should_behave_like 'an option initialized request'
+
+  it 'should raise an exception if a required parameter is missing' do
+    lambda {
+      TestRequest.new(:token_id => 123).valid?
+    }.should raise_error(Relax::MissingParameter)
+  end
 end
 
 describe 'a template request' do
