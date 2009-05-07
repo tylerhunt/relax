@@ -1,13 +1,18 @@
-$:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
+require 'rubygems'
 
-require 'relax/query'
-require 'relax/parsers'
-require 'relax/request'
-require 'relax/response'
-require 'relax/service'
-require 'relax/symbolic_hash'
+gem 'relief', '~> 0.0.2'
+require 'relief'
 
-module Relax
-  class MissingParameter < ArgumentError ; end
-  class UnrecognizedParser < ArgumentError ; end
+gem 'rest-client', '~> 0.9.2'
+require 'restclient'
+
+module Relax # :nodoc:
+  autoload :Action, 'relax/action'
+  autoload :Context, 'relax/context'
+  autoload :Contextable, 'relax/contextable'
+  autoload :Endpoint, 'relax/endpoint'
+  autoload :Instance, 'relax/instance'
+  autoload :Parameter, 'relax/parameter'
+  autoload :Performer, 'relax/performer'
+  autoload :Service, 'relax/service'
 end
