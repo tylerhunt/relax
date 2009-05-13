@@ -6,6 +6,7 @@ module Relax
 
     def authenticate(*args)
       @credentials = args
+      self
     end
 
     class << self

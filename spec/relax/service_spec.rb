@@ -5,6 +5,17 @@ describe Relax::Service do
     Relax::Service.should respond_to(:defaults)
   end
 
+  describe "#authenticate" do
+    it "is callable from within a Service" do
+      Relax::Service.new.should respond_to(:authenticate)
+    end
+
+    it "returns the service" do
+      service = Relax::Service.new
+      service.authenticate('username', 'password').should == service
+    end
+  end
+
   describe ".endpoint" do
     it "is callable from within a Service" do
       Relax::Service.should respond_to(:endpoint)
