@@ -14,7 +14,7 @@ describe Relax::Endpoint do
   end
 
   describe "actions" do
-    it "actions should check for required values for service defaults" do
+    it "should check for required values for service defaults" do
       service = Class.new(Relax::Service) do
         defaults { parameter :api_key, :required => true }
         endpoint("http://api.example.com/") { action(:fetch) { } }
@@ -25,7 +25,7 @@ describe Relax::Endpoint do
       }.should raise_error(ArgumentError, /missing.*api_key/i)
     end
 
-    it "actions should check for required values for endpoint defaults" do
+    it "should check for required values for endpoint defaults" do
       service = Class.new(Relax::Service) do
         endpoint("http://api.example.com/") do
           defaults { parameter :operation, :required => true }
@@ -38,7 +38,7 @@ describe Relax::Endpoint do
       }.should raise_error(ArgumentError, /missing.*operation/i)
     end
 
-    it "actions should check for required values for action parameters" do
+    it "should check for required values for action parameters" do
       service = Class.new(Relax::Service) do
         endpoint("http://api.example.com/") do
           action(:fetch) { parameter :id, :required => true }
@@ -48,6 +48,36 @@ describe Relax::Endpoint do
       proc {
         service.new.fetch
       }.should raise_error(ArgumentError, /missing.*id/i)
+    end
+
+    it "should create required parameters from tokens in the endpoint URL" do
+      service = Class.new(Relax::Service) do
+        endpoint("http://api.example.com/:version/") do
+          action(:fetch) { parameter :id }
+        end
+      end
+
+      proc {
+        service.new.fetch
+      }.should raise_error(ArgumentError, /missing.*version/i)
+    end
+
+    it "should replace parameter tokens in the endpoint URL" do
+      service = Class.new(Relax::Service) do
+        endpoint("http://api.example.com/:version/") do
+          action(:fetch) do
+            parameter :id
+            parser(:xml) { attribute :status }
+          end
+        end
+      end
+
+      FakeWeb.register_uri(:get, 'http://api.example.com/v1/', :string => <<-RESPONSE)
+        <?xml version="1.0" encoding="utf-8" ?>
+        <response status="ok" />
+      RESPONSE
+
+      service.new(:version => 'v1').fetch.should == { :status => 'ok' }
     end
   end
 

@@ -5,6 +5,8 @@ module Relax
       @url = url
       @values = values
       @credentials = credentials
+
+      parse_url_tokens
     end
 
     def perform
@@ -15,7 +17,11 @@ module Relax
     end
 
     def url
-      uri = URI.parse(@url)
+      url = @url.gsub(/\:[a-z_]+/) do |name|
+        @url_values[name[1..-1].to_sym]
+      end
+
+      uri = URI.parse(url)
       uri.query = query unless query.nil? || query.empty?
       uri.userinfo = @credentials.join(':') if @credentials
       uri.to_s
@@ -28,5 +34,14 @@ module Relax
       end.compact.join('&')
     end
     private :query
+
+    def parse_url_tokens
+      @url_values = @url.scan(/(?:\:)([a-z_]+)/).flatten.inject({}) do |values, name|
+        name = name.to_sym
+        values[name] = @values.delete(name) if @values.key?(name)
+        values
+      end
+    end
+    private :parse_url_tokens
   end
 end
