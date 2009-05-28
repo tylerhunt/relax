@@ -25,7 +25,8 @@ module Relax
     end
 
     def parser(root, options={}, &block) # :nodoc:
-      @parser ||= Relief::Parser.new(root, options, &block)
+      @parser ||= root.kind_of?(Class) ?  root.new(options, &block) : 
+                                          Relief::Parser.new(root, options, &block)
     end
 
     def parse(response) # :nodoc:

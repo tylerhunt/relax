@@ -10,3 +10,4 @@ require 'fakeweb'
 
 require File.join(File.dirname(__FILE__), '..', 'lib', 'relax')
 require File.join(File.dirname(__FILE__), 'services', 'flickr')
+require File.join(File.dirname(__FILE__), 'services', 'service_with_custom_parser')
