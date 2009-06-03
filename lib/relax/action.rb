@@ -10,6 +10,7 @@ module Relax
       @options = options
 
       extend_context(endpoint)
+      parse_url_parameters
       context.evaluate(&block) if block_given?
     end
 
@@ -35,5 +36,14 @@ module Relax
       Performer.new(method, url, values, credentials)
     end
     private :performer
+
+    def parse_url_parameters
+      url.scan(/(?:\:)([a-z_]+)/).flatten.each do |name|
+        defaults do
+          parameter name.to_sym, :required => true
+        end
+      end
+    end
+    private :parse_url_parameters
   end
 end
