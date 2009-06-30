@@ -11,7 +11,7 @@ module Relax
     end
 
     def parameter(name, options={})
-      unless @parameters.find { |parameter| parameter.name == name }
+      unless @parameters.find { |parameter| parameter.named?(name) }
         @parameters << Parameter.new(name, options)
       else
         raise ArgumentError.new("Duplicate parameter '#{name}'.")
@@ -19,14 +19,19 @@ module Relax
     end
 
     def set(name, value)
-      if parameter = @parameters.find { |parameter| parameter.name == name }
+      if parameter = @parameters.find { |parameter| parameter.named?(name) }
         parameter.value = value
       end
     end
 
     def parser(root, options={}, &block) # :nodoc:
-      @parser ||= root.kind_of?(Class) ?  root.new(options, &block) : 
-                                          Relief::Parser.new(root, options, &block)
+      @parser ||= begin
+        if root.kind_of?(Class)
+          root.new(options, &block)
+        else
+          Relief::Parser.new(root, options, &block)
+        end
+      end
     end
 
     def parse(response) # :nodoc:

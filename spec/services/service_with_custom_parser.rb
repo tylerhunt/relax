@@ -1,23 +1,19 @@
 class TestCustomParser
-  
   def initialize(options = {}, &block)
   end
-  
+
   def parse(input)
     'parsed'
   end
-  
 end
 
 class ServiceWithCustomParser < Relax::Service
   endpoint "http://test.local/rest" do
-
     action :test do
       parser TestCustomParser do
         element :status, :attribute => :stat
       end
     end
-
   end
 end
 

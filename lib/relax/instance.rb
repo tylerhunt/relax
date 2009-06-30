@@ -8,12 +8,12 @@ module Relax
 
     def values(context)
       context.parameters.inject({}) do |values, parameter|
-        name = parameter.name
+        name = parameter.options[:as] || parameter.name
 
-        if value = @values[parameter.name] || parameter.value
+        if value = @values[name] || parameter.value
           values[parameter.name] = value
         elsif parameter.required?
-          raise ArgumentError.new("Missing value for '#{parameter.name}'.")
+          raise ArgumentError.new("Missing value for '#{name}'.")
         end
 
         values

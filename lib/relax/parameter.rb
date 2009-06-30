@@ -8,6 +8,10 @@ module Relax
       @options = options
     end
 
+    def named?(name)
+      name == (@options[:as] || @name)
+    end
+
     def value
       @value || @options[:default]
     end
