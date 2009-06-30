@@ -9,6 +9,11 @@ module Relax
       self
     end
 
+    def proxy(url)
+      @proxy = url
+      self
+    end
+
     class << self
       include Contextable
 
@@ -23,7 +28,7 @@ module Relax
           @actions[action.name] = action.name
 
           define_method(action.name) do |*args|
-            action.execute(@values, @credentials, *args)
+            action.execute(@values, @credentials, @proxy, *args)
           end
         else
           raise ArgumentError.new("Duplicate action '#{action.name}'.") 

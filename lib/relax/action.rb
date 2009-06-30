@@ -14,10 +14,10 @@ module Relax
       context.evaluate(&block) if block_given?
     end
 
-    def execute(values, credentials, *args)
+    def execute(values, credentials, proxy, *args)
       args.unshift(values) if values
       instance = Instance.new(*args)
-      response = performer(instance, credentials).perform
+      response = performer(instance, credentials, proxy).perform
       context.parse(response)
     end
 
@@ -31,9 +31,9 @@ module Relax
     end
     private :url
 
-    def performer(instance, credentials)
+    def performer(instance, credentials, proxy)
       values = instance.values(context)
-      Performer.new(method, url, values, credentials)
+      Performer.new(method, url, values, credentials, proxy)
     end
     private :performer
 
