@@ -1,16 +1,22 @@
 module Relax
   class Service
-    def initialize(values={})
+    def initialize(values={}, options={})
       @values = values
+      @options = options
     end
 
     def authenticate(*args)
-      @credentials = args
+      @options[:credentials] = args
       self
     end
 
     def proxy(url)
-      @proxy = url
+      @options[:proxy] = url
+      self
+    end
+
+    def include_blank_values(value)
+      @options[:include_blank_values] = value
       self
     end
 
@@ -28,7 +34,7 @@ module Relax
           @actions[action.name] = action.name
 
           define_method(action.name) do |*args|
-            action.execute(@values, @credentials, @proxy, *args)
+            action.execute(@values, @options, *args)
           end
         else
           raise ArgumentError.new("Duplicate action '#{action.name}'.") 

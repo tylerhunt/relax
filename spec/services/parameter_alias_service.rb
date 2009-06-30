@@ -1,4 +1,4 @@
-class ServiceWithParameterAliases < Relax::Service
+class ParameterAliasService < Relax::Service
   endpoint 'http://example.com/' do
     action :test do
       parameter :APIKey, :as => :api_key, :required => true

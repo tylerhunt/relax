@@ -1,4 +1,10 @@
-0.1.1 - Current
+0.1.2 - Current
+
+* Added support for proxies (Tyler Hunt)
+* Added support for parameter name aliases (Tyler Hunt)
+* Added an option to force blank values to be used (Tyler Hunt)
+
+0.1.1 - June 3, 2009
 
 * Added support for tokenized URL parameters (Tyler Hunt)
 * Modified Service#authenticate to return self to allow chaining (Tyler Hunt)

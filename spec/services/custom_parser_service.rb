@@ -7,7 +7,7 @@ class TestCustomParser
   end
 end
 
-class ServiceWithCustomParser < Relax::Service
+class CustomParserService < Relax::Service
   endpoint "http://test.local/rest" do
     action :test do
       parser TestCustomParser do

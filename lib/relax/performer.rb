@@ -1,11 +1,12 @@
 module Relax
   class Performer
-    def initialize(method, url, values, credentials, proxy)
+    def initialize(method, url, values, options={})
       @method = method
       @url = url
       @values = values
-      @credentials = credentials
-      @proxy = proxy
+      @credentials = options.delete(:credentials)
+      @proxy = options.delete(:proxy)
+      @options = options
 
       parse_url_tokens
     end
@@ -33,7 +34,7 @@ module Relax
 
     def query
       @values.collect do |name, value|
-        "#{name}=#{value}" if value
+        "#{name}=#{value}" if value || @options[:include_blank_values]
       end.compact.join('&')
     end
     private :query
