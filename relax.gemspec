@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{relax}
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tyler Hunt"]
-  s.date = %q{2009-06-03}
+  s.date = %q{2009-06-30}
   s.email = %q{tyler@tylerhunt.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -30,8 +30,10 @@ Gem::Specification.new do |s|
     "spec/relax/endpoint_spec.rb",
     "spec/relax/integration_spec.rb",
     "spec/relax/service_spec.rb",
+    "spec/services/blank_values_service.rb",
+    "spec/services/custom_parser_service.rb",
     "spec/services/flickr.rb",
-    "spec/services/service_with_custom_parser.rb",
+    "spec/services/parameter_alias_service.rb",
     "spec/spec_helper.rb"
   ]
   s.has_rdoc = true
@@ -46,8 +48,10 @@ Gem::Specification.new do |s|
     "spec/relax/endpoint_spec.rb",
     "spec/relax/integration_spec.rb",
     "spec/relax/service_spec.rb",
+    "spec/services/blank_values_service.rb",
+    "spec/services/custom_parser_service.rb",
     "spec/services/flickr.rb",
-    "spec/services/service_with_custom_parser.rb",
+    "spec/services/parameter_alias_service.rb",
     "spec/spec_helper.rb"
   ]
 
