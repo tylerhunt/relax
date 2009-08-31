@@ -15,8 +15,7 @@ begin
     gem.rubyforge_project = 'relax'
 
     gem.add_dependency('rest-client', '~> 0.9.2')
-    gem.add_dependency('nokogiri', '~> 1.2.3')
-    gem.add_dependency('relief', '~> 0.0.3')
+    gem.add_dependency('relief', '~> 0.0.4')
 
     gem.add_development_dependency('jeweler', '~> 0.11.0')
     gem.add_development_dependency('rspec', '~> 1.2.2')

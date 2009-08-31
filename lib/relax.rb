@@ -1,6 +1,6 @@
 require 'rubygems'
 
-gem 'relief', '~> 0.0.2'
+gem 'relief', '~> 0.0.4'
 require 'relief'
 
 gem 'rest-client', '~> 0.9.2'
