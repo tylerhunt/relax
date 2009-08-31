@@ -1,5 +1,6 @@
-0.1.3 - Present
+0.1.3 - August 31, 2009
 
+* Added basic request logging (Tyler Hunt)
 * Updated to Relief 0.0.4 (Tyler Hunt)
 
 0.1.2 - June 30, 2009
