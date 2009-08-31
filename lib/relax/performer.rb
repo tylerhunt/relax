@@ -4,6 +4,7 @@ module Relax
       @method = method
       @url = url
       @values = values
+      @logger = options.delete(:logger)
       @credentials = options.delete(:credentials)
       @proxy = options.delete(:proxy)
       @options = options
@@ -15,8 +16,12 @@ module Relax
       RestClient.proxy = @proxy if @proxy
 
       case @method
-        when :delete, :get, :head then RestClient.send(@method, url)
-        when :post, :put then RestClient.send(@method, url, query)
+        when :delete, :get, :head
+          @logger.info "#{@method.to_s.upcase} #{url}" if @logger
+          RestClient.send(@method, url)
+        when :post, :put
+          @logger.info "#{@method.to_s.upcase} #{url}\n#{query}" if @logger
+          RestClient.send(@method, url, query)
       end
     end
 
