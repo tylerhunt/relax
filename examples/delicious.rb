@@ -3,12 +3,18 @@ require 'multi_xml'
 require 'faraday_middleware'
 
 module Delicious
+  module Config
+    attr :username, true
+    attr :password, true
+  end
+
   class Client
     include Relax::Client
 
-    parameter :base_uri, default: 'https://api.del.icio.us/v1'
-    parameter :username
-    parameter :password
+    def initialize
+      config.base_uri = 'https://api.del.icio.us/v1'
+      config.extend(Config)
+    end
 
     def posts
       @posts ||= Resources::Posts.new(self)

@@ -5,7 +5,9 @@ describe Relax::Resource do
     Class.new do
       include Relax::Client
 
-      parameter :base_uri, default: 'http://api.example.com/v2'
+      def initialize
+        config.base_uri = 'http://api.example.com/v2'
+      end
     end.new
   end
 

@@ -5,7 +5,9 @@ module Vimeo
   class Client
     include Relax::Client
 
-    parameter :base_uri, default: 'http://vimeo.com/api/v2'
+    def initialize
+      config.base_uri = 'http://vimeo.com/api/v2'
+    end
 
     def user(username)
       Resources::User.new(self, username: username)

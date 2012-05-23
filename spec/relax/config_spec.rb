@@ -1,20 +1,17 @@
 require 'spec_helper'
 
 describe Relax::Config do
-  context '.build' do
-    it 'defines an attribute reader' do
-      config = described_class.build(api_key: {})
-      config.should respond_to(:api_key)
+  context '#configure' do
+    it 'yields an instance of the configuration' do
+      expect {
+        subject.configure do |config|
+          config.base_uri = 'http://api.example.com/v2'
+        end
+      }.to change(subject, :base_uri).to('http://api.example.com/v2')
     end
 
-    it 'defines an attribute writer' do
-      config = described_class.build(api_key: {})
-      config.should respond_to(:api_key=)
-    end
-
-    it 'allows a default value to be specified' do
-      config = described_class.build(api_key: { default: 'TEST' })
-      config.api_key.should == 'TEST'
+    it 'returns the configuration' do
+      subject.configure { }.should == subject
     end
   end
 end

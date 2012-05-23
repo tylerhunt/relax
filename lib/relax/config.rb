@@ -1,21 +1,12 @@
 module Relax
   class Config
-    def self.build(parameters)
-      Class.new do
-        parameters.each do |name, options|
-          attr name, true
+    attr :adapter, true
+    attr :base_uri, true
+    attr :user_agent, true
 
-          if default = options[:default]
-            define_method(name) do
-              if instance_variables.include?("@#{name}")
-                instance_variable_get("@#{name}")
-              else
-                instance_variable_set("@#{name}", default)
-              end
-            end
-          end
-        end
-      end.new
+    def configure
+      yield(self)
+      self
     end
   end
 end
