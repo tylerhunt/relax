@@ -23,7 +23,7 @@ describe Relax::Delegator do
 
   context 'delegation' do
     Relax::Client.instance_methods.each do |method|
-      it "delegates .#{method} to .delegator" do
+      it "delegates .#{method} to the client" do
         subject.client.should_receive(method)
         subject.send(method)
       end
