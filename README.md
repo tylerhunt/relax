@@ -1,23 +1,80 @@
 # Relax
 
-A flexible library for creating web service consumers.
+A library of simple modules for building web service wrappers.
 
 
-## Installation
+## Usage
 
-Add this line to your application's Gemfile:
+Relax a toolkit of sorts, which makes it easier to write Faraday-based API
+Gems while still leaning heavily on the strengths of the Ruby language.
+
+### Overview
+
+Relax is made up of four primary modules:
+
+  * `Relax::Config` — the mechanism used to configure the client including
+
+  * `Relax::Client` — forms the basis of a web service wrapper by storing the
+    configuration and serving as a factory for resources
+
+  * `Relax::Resource` — used to handle the actual web service connections and
+    help organize related endpoints
+
+  * `Relax::Delegator` — delegates class methods to an instance of the client
+    allowing for simple client usage
+
+### Example
 
 ``` ruby
-gem 'relax'
+require 'relax'
+require 'faraday_middleware' # for JSON response parsing
+
+module Vimeo
+  class Config
+    include Relax::Config
+
+    parameter :base_uri, default: 'http://vimeo.com/api/v2'
+  end
+
+  class Client
+    include Relax::Client
+
+    configure_with Config
+
+    def user(username)
+      Resources::User.new(self, username: username)
+    end
+  end
+
+  module Resource
+    include Relax::Resource
+
+    def connection
+      super { |builder| builder.response(:json) }
+    end
+  end
+
+  module Resources
+    class User
+      include Resource
+
+      def videos
+        get("#{@options[:username]}/videos.json").body
+      end
+    end
+  end
+
+  include Relax::Delegator
+
+  delegate_to Client
+end
+
+Vimeo.user(ENV['VIMEO_USERNAME']).videos
 ```
 
-And then execute:
+See the [`examples` directory][examples] for more.
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install relax
+[examples]: http://github.com/tylerhunt/relax/examples
 
 
 ## Contributing
