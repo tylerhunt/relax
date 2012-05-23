@@ -2,16 +2,10 @@ require 'relax'
 require 'faraday_middleware'
 
 module Vimeo
-  class Config
-    include Relax::Config
-
-    parameter :base_uri, default: 'http://vimeo.com/api/v2'
-  end
-
   class Client
     include Relax::Client
 
-    configure_with Config
+    parameter :base_uri, default: 'http://vimeo.com/api/v2'
 
     def user(username)
       Resources::User.new(self, username: username)

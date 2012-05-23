@@ -1,32 +1,21 @@
-require 'faraday'
-
 module Relax
-  module Config
-    USER_AGENT = "Relax Ruby Gem Client #{Relax::VERSION}"
+  class Config
+    def self.build(parameters)
+      Class.new do
+        parameters.each do |name, options|
+          attr name, true
 
-    def self.included(base)
-      base.extend(ClassMethods)
-
-      base.parameter :adapter, default: Faraday.default_adapter
-      base.parameter :base_uri
-      base.parameter :user_agent, default: USER_AGENT
-    end
-
-    module ClassMethods
-      attr :parameters
-
-      def parameter(name, options={})
-        attr(name, true)
-        (@parameters ||= {})[name] = options
-      end
-    end
-
-    def initialize
-      self.class.parameters.each do |name, options|
-        if default = options[:default]
-          send(:"#{name}=", default)
+          if default = options[:default]
+            define_method(name) do
+              if instance_variables.include?("@#{name}")
+                instance_variable_get("@#{name}")
+              else
+                instance_variable_set("@#{name}", default)
+              end
+            end
+          end
         end
-      end if self.class.parameters
+      end.new
     end
   end
 end

@@ -10,9 +10,7 @@ Gems while still leaning heavily on the strengths of the Ruby language.
 
 ### Overview
 
-Relax is made up of four primary modules:
-
-  * `Relax::Config` — the mechanism used to configure the client including
+Relax is made up of three primary modules:
 
   * `Relax::Client` — forms the basis of a web service wrapper by storing the
     configuration and serving as a factory for resources
@@ -30,16 +28,10 @@ require 'relax'
 require 'faraday_middleware' # for JSON response parsing
 
 module Vimeo
-  class Config
-    include Relax::Config
-
-    parameter :base_uri, default: 'http://vimeo.com/api/v2'
-  end
-
   class Client
     include Relax::Client
 
-    configure_with Config
+    parameter :base_uri, default: 'http://vimeo.com/api/v2'
 
     def user(username)
       Resources::User.new(self, username: username)

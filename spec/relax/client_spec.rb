@@ -1,46 +1,62 @@
 require 'spec_helper'
 
 describe Relax::Client do
-  let(:configurator) { Class.new { include Relax::Config } }
+  let(:client) { Class.new { include Relax::Client } }
 
-  subject { Class.new { include Relax::Client } }
+  subject { client }
 
-  context '.configure_with' do
-    it 'sets the configurator for the client' do
-      subject.configure_with(configurator)
-      subject.configurator.should == configurator
+  context '.parameter' do
+    it 'defines an attribute reader' do
+      expect {
+        subject.parameter :api_key
+      }.to change { subject.new.respond_to?(:api_key) }
+    end
+
+    it 'defines an attribute writer' do
+      expect {
+        subject.parameter :api_key
+      }.to change { subject.new.respond_to?(:api_key=) }
+    end
+
+    it 'allows a default value to be specified' do
+      subject.parameter :api_key, default: 'TEST'
+      subject.new.config.api_key.should == 'TEST'
     end
   end
 
+  context 'default parameters' do
+    subject { client.new.config }
+
+    its(:adapter) { should == Faraday.default_adapter }
+    its(:base_uri) { should be_nil }
+    its(:user_agent) { should == "Relax Ruby Gem Client #{Relax::VERSION}" }
+  end
+
   context '#config' do
-    let(:client) { subject.new }
+    subject { client.new }
 
-    before { subject.configure_with(configurator) }
-
-    it 'returns an instance of the configurator' do
-      client.config.should be_a(configurator)
+    it 'returns a configuration object with defaults set' do
+      subject.config.user_agent.should == Relax::Client::USER_AGENT
     end
 
     it 'memoizes the configuration' do
-      client.config.should == client.config
+      subject.config.should == subject.config
     end
   end
 
   context '#configure' do
-    let(:client) { subject.new }
+    subject { client.new }
 
-    before { subject.configure_with(configurator) }
-
-    it 'yields an instance of the configurator' do
+    it 'yields an instance of the configuration' do
       expect {
-        client.configure do |config|
+        subject.configure do |config|
           config.base_uri = 'http://api.example.com/v2'
         end
-      }.to change(client.config, :base_uri).to('http://api.example.com/v2')
+      }.to change(subject.config, :base_uri).to('http://api.example.com/v2')
     end
 
-    it 'returns the configurator' do
-      client.configure { }.should == client.config
+    it 'returns the configuration' do
+      subject.configure { }.should == subject.config
     end
   end
 end

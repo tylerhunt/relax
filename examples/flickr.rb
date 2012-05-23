@@ -2,17 +2,11 @@ require 'relax'
 require 'faraday_middleware'
 
 module Flickr
-  class Config
-    include Relax::Config
-
-    parameter :base_uri, default: 'http://api.flickr.com/services/rest/'
-    parameter :api_key
-  end
-
   class Client
     include Relax::Client
 
-    configure_with Config
+    parameter :base_uri, default: 'http://api.flickr.com/services/rest/'
+    parameter :api_key
 
     def search
       @search ||= Resources::Search.new(self)

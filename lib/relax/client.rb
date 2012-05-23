@@ -1,19 +1,28 @@
+require 'faraday'
+
 module Relax
   module Client
+    USER_AGENT = "Relax Ruby Gem Client #{Relax::VERSION}"
+
     def self.included(base)
       base.extend(ClassMethods)
+
+      base.parameter :adapter, default: Faraday.default_adapter
+      base.parameter :base_uri
+      base.parameter :user_agent, default: USER_AGENT
     end
 
     module ClassMethods
-      attr :configurator
+      attr :parameters
 
-      def configure_with(configurator)
-        @configurator = configurator
+      def parameter(name, options={})
+        attr(name, true)
+        (@parameters ||= {})[name] = options
       end
     end
 
     def config
-      @config ||= self.class.configurator.new
+      @config ||= Config.build(self.class.parameters)
     end
 
     def configure

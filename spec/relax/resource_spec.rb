@@ -1,23 +1,21 @@
 require 'spec_helper'
 
 describe Relax::Resource do
-  let(:config) do
+  let(:client) do
     Class.new do
-      include Relax::Config
+      include Relax::Client
+
       parameter :base_uri, default: 'http://api.example.com/v2'
-    end
+    end.new
   end
 
-  let(:client) { Class.new { include Relax::Client } }
-  let(:resource) { Class.new { include Relax::Resource } }
+  let(:resource_class) { Class.new { include Relax::Resource } }
 
-  before { client.configure_with(config) }
-
-  subject { resource.new(client.new) }
+  subject { resource_class.new(client) }
 
   context '.new' do
     it 'accepts an options hash' do
-      resource.new(client, key: :value)
+      resource_class.new(client, key: :value)
     end
   end
 
@@ -29,7 +27,7 @@ describe Relax::Resource do
     end
 
     it 'uses the configured base URI as the URL' do
-      connection.url_prefix.should == URI.parse(config.new.base_uri)
+      connection.url_prefix.should == URI.parse(client.config.base_uri)
     end
 
     it 'accepts an options hash to be passed to Faraday::Connection' do
