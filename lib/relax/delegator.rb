@@ -1,21 +1,24 @@
 module Relax
   module Delegator
-    attr :client
-    private :client
+    def self.[](client_method)
+      Module.new do
+        include ClassMethods
 
-    def delegate_to(client)
-      @client = client.new
+        define_method(:client_instance) { send(client_method) }
+      end
     end
 
-    def respond_to?(method, include_private=false)
-      super || client.respond_to?(method, include_private)
-    end
+    module ClassMethods
+      def respond_to?(method, include_private=false)
+        super || client_instance.respond_to?(method, include_private)
+      end
 
-    def method_missing(method, *args, &block)
-      if client.respond_to?(method)
-        client.send(method, *args, &block)
-      else
-        super
+      def method_missing(method, *args, &block)
+        if client_instance.respond_to?(method)
+          client_instance.send(method, *args, &block)
+        else
+          super
+        end
       end
     end
   end

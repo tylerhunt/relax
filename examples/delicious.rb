@@ -41,10 +41,6 @@ module Delicious
       end
     end
   end
-
-  extend Relax::Delegator
-
-  delegate_to Client
 end
 
 delicious = Delicious::Client.new

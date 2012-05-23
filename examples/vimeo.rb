@@ -2,6 +2,8 @@ require 'relax'
 require 'faraday_middleware'
 
 module Vimeo
+  extend Relax::Delegator[:client]
+
   class Client
     include Relax::Client
 
@@ -40,9 +42,9 @@ module Vimeo
     end
   end
 
-  extend Relax::Delegator
-
-  delegate_to Client
+  def self.client
+    @client ||= Client.new
+  end
 end
 
 vimeo_user = Vimeo.user(ENV['VIMEO_USERNAME'])

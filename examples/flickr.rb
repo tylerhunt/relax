@@ -2,6 +2,8 @@ require 'relax'
 require 'faraday_middleware'
 
 module Flickr
+  extend Relax::Delegator[:client]
+
   module Config
     attr :api_key, true
   end
@@ -50,9 +52,9 @@ module Flickr
     end
   end
 
-  extend Relax::Delegator
-
-  delegate_to Client
+  def self.client
+    @client ||= Client.new
+  end
 end
 
 Flickr.configure do |config|

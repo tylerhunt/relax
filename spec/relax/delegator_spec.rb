@@ -3,21 +3,28 @@ require 'spec_helper'
 describe Relax::Delegator do
   let(:client) { Class.new { include Relax::Client } }
 
-  subject { Class.new { extend Relax::Delegator } }
+  subject do
+    Class.new do
+      extend Relax::Delegator[:client]
 
-  context '.delegate_to' do
-    it 'sets the client for the delegator' do
-      subject.delegate_to(client)
-      subject.send(:client).should be_a(client)
+      class << self
+        attr :client, true
+      end
+    end
+  end
+
+  before { subject.client = client.new }
+
+  context '.[]' do
+    it 'accepts a client method name and returns a module' do
+      described_class[:client].should be_a(Module)
     end
   end
 
   context 'delegation' do
-    before { subject.delegate_to(client) }
-
-    [:config, :configure].each do |method|
+    Relax::Client.instance_methods.each do |method|
       it "delegates .#{method} to .delegator" do
-        subject.send(:client).should_receive(method)
+        subject.client.should_receive(method)
         subject.send(method)
       end
     end
