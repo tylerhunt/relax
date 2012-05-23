@@ -1,18 +1,8 @@
-require 'rubygems'
+require 'relax/version'
 
-gem 'relief', '~> 0.0.4'
-require 'relief'
-
-gem 'rest-client', '~> 0.9.2'
-require 'restclient'
-
-module Relax # :nodoc:
-  autoload :Action, 'relax/action'
-  autoload :Context, 'relax/context'
-  autoload :Contextable, 'relax/contextable'
-  autoload :Endpoint, 'relax/endpoint'
-  autoload :Instance, 'relax/instance'
-  autoload :Parameter, 'relax/parameter'
-  autoload :Performer, 'relax/performer'
-  autoload :Service, 'relax/service'
+module Relax
+  autoload :Client, 'relax/client'
+  autoload :Config, 'relax/config'
+  autoload :Delegator, 'relax/delegator'
+  autoload :Resource, 'relax/resource'
 end
