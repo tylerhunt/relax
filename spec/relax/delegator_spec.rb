@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Relax::Delegator do
   let(:client) { Class.new { include Relax::Client } }
 
-  subject { Class.new { include Relax::Delegator } }
+  subject { Class.new { extend Relax::Delegator } }
 
   context '.delegate_to' do
     it 'sets the client for the delegator' do

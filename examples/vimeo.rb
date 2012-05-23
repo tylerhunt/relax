@@ -40,7 +40,7 @@ module Vimeo
     end
   end
 
-  include Relax::Delegator
+  extend Relax::Delegator
 
   delegate_to Client
 end
