@@ -16,6 +16,8 @@ module Relax
       options[:url] ||= config.base_uri
       options[:headers] ||= {}
       options[:headers][:user_agent] ||= config.user_agent
+      options[:request] ||= {}
+      options[:request][:timeout] ||= config.timeout
 
       Faraday.new(options) do |builder|
         yield(builder) if block_given?

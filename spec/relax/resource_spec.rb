@@ -32,6 +32,10 @@ describe Relax::Resource do
       connection.url_prefix.should == URI.parse(client.config.base_uri)
     end
 
+    it 'uses the configured timeout' do
+      connection.options[:timeout].should == client.config.timeout
+    end
+
     it 'accepts an options hash to be passed to Faraday::Connection' do
       headers = { user_agent: "#{described_class} Test" }
       connection = subject.send(:connection, headers: headers)
