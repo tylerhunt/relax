@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.2.0 – Unreleased
+## 0.2.1 – May 30, 2012
+
+* Add a timeout configuration option and use it on the resource connection
+
+## 0.2.0 – May 23, 2012
 
 * Rewrote from scratch to be a smaller, simpler library
 
