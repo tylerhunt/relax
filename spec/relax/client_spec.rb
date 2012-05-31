@@ -19,6 +19,7 @@ describe Relax::Client do
 
       its(:adapter) { should == Faraday.default_adapter }
       its(:base_uri) { should be_nil }
+      its(:timeout) { should == 60 }
       its(:user_agent) { should == "Relax Ruby Gem Client #{Relax::VERSION}" }
     end
   end
