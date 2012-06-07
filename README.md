@@ -1,5 +1,10 @@
 # Relax
 
+[![Build Status][travis-image]][travis]
+
+[travis]: http://travis-ci.org/tylerhunt/relax
+[travis-image]: https://secure.travis-ci.org/tylerhunt/relax.png
+
 A library of simple modules for building web service wrappers.
 
 
