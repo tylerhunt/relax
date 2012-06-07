@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2 – June 7, 2012
+
+* Move default configuration into `Config`.
+* Add `Configurable` module to encapsulate `#config` and `#configure`.
+* Improve documentation and examples.
+
 ## 0.2.1 – May 30, 2012
 
 * Add a timeout configuration option and use it on the resource connection
