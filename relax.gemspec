@@ -7,6 +7,8 @@ Gem::Specification.new do |gem|
   gem.homepage = 'http://github.com/tylerhunt/relax'
   gem.author = 'Tyler Hunt'
 
+  gem.required_ruby_version = '>= 1.9'
+
   gem.add_dependency 'faraday', '~> 0.8.0'
   gem.add_development_dependency 'rspec', '~> 2.6'
 
