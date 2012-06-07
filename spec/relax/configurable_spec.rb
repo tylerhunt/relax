@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Relax::Client do
-  let(:client) { Class.new { include Relax::Client }.new }
+describe Relax::Configurable do
+  let(:configurable) { Class.new { include Relax::Configurable }.new }
 
-  subject { client }
+  subject { configurable }
 
   context '#config' do
     it 'returns an instance of Relax::Config' do
@@ -25,7 +25,7 @@ describe Relax::Client do
     end
 
     it 'returns self' do
-      subject.configure { }.should == client
+      subject.configure { }.should == configurable
     end
   end
 end
