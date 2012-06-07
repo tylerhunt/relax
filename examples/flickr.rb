@@ -1,9 +1,15 @@
+# This example shows:
+#
+#   - overriding the default configuration values in Client#initialize
+#   - extending the configuration with custom values using config.extend
+#   - overriding Resource#get to merge in custom parameters
+#   - customizing the resource to use JSON response parsing
+#   - providing a module-level client accessor without using delegation
+
 require 'relax'
 require 'faraday_middleware'
 
 module Flickr
-  extend Relax::Delegator[:client]
-
   module Config
     attr :api_key, true
   end
@@ -36,9 +42,7 @@ module Flickr
     end
 
     def connection
-      super do |builder|
-        builder.response(:json)
-      end
+      super { |builder| builder.response(:json) }
     end
   end
 
@@ -57,10 +61,10 @@ module Flickr
   end
 end
 
-Flickr.configure do |config|
+Flickr.client.configure do |config|
   config.api_key = ENV['FLICKR_API_KEY']
 end
 
-photos = Flickr.search.photos('ruby')
+photos = Flickr.client.search.photos('ruby')
 
 puts photos.first(10).collect { |photo| photo['title'] }

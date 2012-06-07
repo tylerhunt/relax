@@ -1,19 +1,30 @@
+# This example shows:
+#
+#   - inheriting from Relax::Config and overriding Client#config to use it
+#   - customizing the resource to use basic auth and XML response parsing
+#   - instantiating multiple clients with distinct configurations
+#   - modifying a client instance endpoint to point to a different API
+
 require 'relax'
 require 'multi_xml'
 require 'faraday_middleware'
 
 module Delicious
-  module Config
+  class Config < Relax::Config
     attr :username, true
     attr :password, true
+
+    def initialize
+      super
+      self.base_uri = 'https://api.del.icio.us/v1'
+    end
   end
 
   class Client
     include Relax::Client
 
-    def initialize
-      config.base_uri = 'https://api.del.icio.us/v1'
-      config.extend(Config)
+    def config
+      @config ||= Config.new
     end
 
     def posts

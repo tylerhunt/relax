@@ -1,3 +1,9 @@
+# This example shows:
+#
+#   - using Relax::Delegator to make the root module behave like a client
+#   - how to create resources that accept options for resource-level defaults
+#   - customizing the resource to use JSON response parsing
+
 require 'relax'
 require 'faraday_middleware'
 

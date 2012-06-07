@@ -21,6 +21,11 @@ Relax is made up of three primary modules:
   * `Relax::Delegator` — delegates class methods to an instance of the client
     allowing for simple client usage
 
+It also includes a basic configuration class, `Relax::Config`, which defines
+some of client defaults and can used as the basis for your own custom
+configuration classes.
+
+
 ### Example
 
 ``` ruby
@@ -28,6 +33,8 @@ require 'relax'
 require 'faraday_middleware' # for JSON response parsing
 
 module Vimeo
+  extend Relax::Delegator[:client]
+
   class Client
     include Relax::Client
 
@@ -58,9 +65,9 @@ module Vimeo
     end
   end
 
-  extend Relax::Delegator
-
-  delegate_to Client
+  def self.client
+    @client ||= Client.new
+  end
 end
 
 Vimeo.user(ENV['VIMEO_USERNAME']).videos
