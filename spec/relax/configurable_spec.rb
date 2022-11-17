@@ -1,31 +1,24 @@
-require 'spec_helper'
-
-describe Relax::Configurable do
-  let(:configurable) { Class.new { include Relax::Configurable }.new }
-
-  subject { configurable }
+RSpec.describe Relax::Configurable do
+  subject(:configurable) { Class.new { include Relax::Configurable }.new }
 
   context '#config' do
     it 'returns an instance of Relax::Config' do
-      subject.config.should be_a(Relax::Config)
+      expect(configurable.config).to be_a Relax::Config
     end
 
     it 'memoizes the configuration' do
-      subject.config.should == subject.config
+      expect(configurable.config).to eq configurable.config
     end
   end
 
   context '#configure' do
     it 'yields an instance of the configuration' do
-      expect {
-        subject.configure do |config|
-          config.base_uri = 'http://api.example.com/v2'
-        end
-      }.to change(subject.config, :base_uri).to('http://api.example.com/v2')
+      expect { |block| configurable.configure &block }
+        .to yield_with_args(configurable.config)
     end
 
     it 'returns self' do
-      subject.configure { }.should == configurable
+      expect(configurable.configure {}).to eq configurable
     end
   end
 end

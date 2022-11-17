@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Relax::Config do
+RSpec.describe Relax::Config do
   {
     USER_AGENT: "Relax Ruby Gem Client #{Relax::VERSION}",
     TIMEOUT: 60
@@ -8,18 +6,33 @@ describe Relax::Config do
     context "::#{constant}" do
       subject { described_class.const_get(constant) }
 
-      it { should == value }
+      it { is_expected.to eq value }
     end
   end
 
-  context '.new' do
-    subject { described_class.new }
+  subject(:config) { described_class.new }
 
-    context 'defaults' do
-      its(:adapter) { should == Faraday.default_adapter }
-      its(:base_uri) { should be_nil }
-      its(:timeout) { should == 60 }
-      its(:user_agent) { should == "Relax Ruby Gem Client #{Relax::VERSION}" }
+  context '#adapter' do
+    it 'defaults to Faraday’s default adapter' do
+      expect(config.adapter).to eq Faraday.default_adapter
+    end
+  end
+
+  context '#base_uri' do
+    it 'defaults to nil' do
+      expect(config.base_uri).to be_nil
+    end
+  end
+
+  context '#adapter' do
+    it 'has a default value' do
+      expect(config.timeout).to eq 60
+    end
+  end
+
+  context '#adapter' do
+    it 'has a default value' do
+      expect(config.user_agent).to eq "Relax Ruby Gem Client #{Relax::VERSION}"
     end
   end
 end

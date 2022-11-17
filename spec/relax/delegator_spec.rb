@@ -1,9 +1,7 @@
-require 'spec_helper'
-
-describe Relax::Delegator do
+RSpec.describe Relax::Delegator do
   let(:client) { Class.new { include Relax::Client } }
 
-  subject do
+  subject(:delegator) do
     Class.new do
       extend Relax::Delegator[:client]
 
@@ -13,19 +11,20 @@ describe Relax::Delegator do
     end
   end
 
-  before { subject.client = client.new }
+  before { delegator.client = client.new }
 
   context '.[]' do
     it 'accepts a client method name and returns a module' do
-      described_class[:client].should be_a(Module)
+      expect(described_class[:client]).to be_a Module
     end
   end
 
   context 'delegation' do
     Relax::Client.instance_methods.each do |method|
       it "delegates .#{method} to the client" do
-        subject.client.should_receive(method)
-        subject.send(method)
+        expect(delegator.client).to receive(method)
+
+        delegator.send method
       end
     end
   end

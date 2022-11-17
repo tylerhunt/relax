@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Relax::Resource do
+RSpec.describe Relax::Resource do
   let(:client) do
     Class.new do
       include Relax::Client
@@ -13,7 +11,7 @@ describe Relax::Resource do
 
   let(:resource_class) { Class.new { include Relax::Resource } }
 
-  subject { resource_class.new(client) }
+  subject(:resource) { resource_class.new(client) }
 
   context '.new' do
     it 'accepts an options hash' do
@@ -22,42 +20,50 @@ describe Relax::Resource do
   end
 
   context '#connection' do
-    let(:connection) { subject.send(:connection) }
+    let(:connection) { resource.send(:connection) }
 
     it 'returns an instance of Faraday::Connection' do
-      connection.should be_a(Faraday::Connection)
+      expect(connection).to be_a Faraday::Connection
     end
 
     it 'uses the configured base URI as the URL' do
-      connection.url_prefix.should == URI.parse(client.config.base_uri)
+      expect(connection.url_prefix).to eq URI.parse(client.config.base_uri)
     end
 
     it 'uses the configured timeout' do
-      connection.options[:timeout].should == client.config.timeout
+      expect(connection.options[:timeout]).to eq client.config.timeout
     end
 
     it 'accepts an options hash to be passed to Faraday::Connection' do
       headers = { user_agent: "#{described_class} Test" }
-      connection = subject.send(:connection, headers: headers)
-      connection.headers['User-Agent'].should == headers[:user_agent]
+      connection = resource.send(:connection, headers: headers)
+
+      expect(connection.headers['User-Agent']).to eq headers[:user_agent]
     end
 
     it 'yields a builder to allow the middleware to be customized' do
-      subject.send(:connection) do |builder|
-        builder.use(Faraday::Response::Logger)
-      end.builder.handlers.should include(Faraday::Response::Logger)
+      connection = resource.send(:connection) { |builder|
+        builder.use Faraday::Response::Logger
+      }
+
+      expect(connection.builder.handlers).to include Faraday::Response::Logger
     end
   end
 
   context 'connection delegation' do
-    let(:connection) { stub(:connection) }
+    let(:connection) { double(:connection) }
 
-    before { subject.stub(:connection).and_return(connection) }
+    before do
+      allow(resource)
+        .to receive(:connection)
+        .and_return(connection)
+    end
 
     Faraday::Connection::METHODS.each do |method|
       it "delegates ##{method} to #connection" do
-        connection.should_receive(method)
-        subject.send(method)
+        expect(connection).to receive(method)
+
+        resource.send method
       end
     end
   end

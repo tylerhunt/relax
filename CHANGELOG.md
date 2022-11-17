@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Support Faraday ~> 2.0
+
 ## 0.2.2 – June 7, 2012
 
 * Move default configuration into `Config`.
