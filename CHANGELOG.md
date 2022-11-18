@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Support Faraday ~> 2.0
+* Require Ruby >= 2.6
 
 ## 0.2.2 – June 7, 2012
 
