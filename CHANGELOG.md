@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 - November 17, 2022
 
 * Support Faraday ~> 2.0
 * Require Ruby >= 2.6
