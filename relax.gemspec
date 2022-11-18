@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'faraday', '~> 2.0'
   spec.add_development_dependency 'rspec', '~> 3.12'
+  spec.add_development_dependency 'appraisal', '~> 2.4'
 
   spec.files = `git ls-files`.split($\)
   spec.executables = spec.files.grep(%r{^bin/}).map { |f| File.basename(f) }
