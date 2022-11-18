@@ -1,19 +1,20 @@
 require './lib/relax/version'
 
-Gem::Specification.new do |gem|
-  gem.name = 'relax'
-  gem.version = Relax::VERSION
-  gem.summary = 'A flexible library for creating web service consumers.'
-  gem.homepage = 'http://github.com/tylerhunt/relax'
-  gem.author = 'Tyler Hunt'
+Gem::Specification.new do |spec|
+  spec.name = 'relax'
+  spec.version = Relax::VERSION
+  spec.authors = ['Tyler Hunt']
+  spec.summary = 'A flexible library for creating web service consumers.'
+  spec.homepage = 'http://github.com/tylerhunt/relax'
+  spec.license = 'MIT'
 
-  gem.required_ruby_version = '>= 1.9'
+  spec.required_ruby_version = '>= 1.9'
 
-  gem.add_dependency 'faraday', '~> 2.0'
-  gem.add_development_dependency 'rspec', '~> 3.12'
+  spec.add_dependency 'faraday', '~> 2.0'
+  spec.add_development_dependency 'rspec', '~> 3.12'
 
-  gem.files = `git ls-files`.split($\)
-  gem.executables = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
-  gem.test_files = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
+  spec.files = `git ls-files`.split($\)
+  spec.executables = spec.files.grep(%r{^bin/}).map { |f| File.basename(f) }
+  spec.test_files = spec.files.grep(%r{^(test|spec|features)/})
+  spec.require_paths = ['lib']
 end
